@@ -47,6 +47,9 @@ resource "aws_vpc" "us-west" {
 #IG 2
 resource "aws_internet_gateway" "gw-west" {
   vpc_id = aws_vpc.us-west.id
+  tags = {
+      Name = "VPC-2"
+  }
 }
 
 #Subnet 2-1

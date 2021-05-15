@@ -10,7 +10,7 @@ resource "aws_vpc" "us-east" {
 #VPC 2
 resource "aws_vpc" "us-west" {
   provider = aws.region-2  
-  cidr_block = "172.31.0.0/16"
+  cidr_block = "172.16.0.0/16"
   tags = {
       Name = "VPC-2"
   }

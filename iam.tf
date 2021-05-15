@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "pipeline-policies" {
     }
     statement{
         sid = ""
-        actions = ["cloudwatch:*", "s3:*", "codebuild:*"]
+        actions = ["cloudwatch:*", "s3:*", "vpc:*", "codebuild:*"]
         resources = ["*"]
         effect = "Allow"
     }

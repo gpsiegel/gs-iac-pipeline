@@ -1,20 +1,10 @@
-terraform{
-    backend "s3" {
-        bucket = "gs-iac-pipeline"
-        encrypt = true
-        key = "terraform.tfstate"
-        region = "us-east-1"
-    }
-}
+terraform {
+  required_version = ">=0.15.3"
 
-#default region
-provider "aws" {
-    alias = "region-1"
-    region = "us-east-1"
-}
-
-#secondary region
-provider "aws" {
-    alias = "region-2"
-    region = "us-west-1"
+  backend "s3" {
+    bucket  = "gs-iac-pipeline"
+    encrypt = true
+    key     = "terraform.tfstate"
+    region  = "us-east-1"
+  }
 }

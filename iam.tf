@@ -18,30 +18,30 @@ resource "aws_iam_role" "pipeline_role" {
 }
 
 data "aws_iam_policy_document" "pipeline-policies" {
-    statement{
-        sid = ""
-        actions = ["codestar-connections:UseConnection"]
-        resources = ["*"]
-        effect = "Allow"
-    }
-    statement{
-        sid = ""
-        actions = ["cloudwatch:*", "s3:*", "vpc:*", "codebuild:*"]
-        resources = ["*"]
-        effect = "Allow"
-    }
+  statement {
+    sid       = ""
+    actions   = ["codestar-connections:UseConnection"]
+    resources = ["*"]
+    effect    = "Allow"
+  }
+  statement {
+    sid       = ""
+    actions   = ["cloudwatch:*", "s3:*", "vpc:*", "codebuild:*"]
+    resources = ["*"]
+    effect    = "Allow"
+  }
 }
 
 resource "aws_iam_policy" "pipeline-policy" {
-    name = "pipeline-policy"
-    path = "/"
-    description = "Pipeline policy"
-    policy = data.aws_iam_policy_document.pipeline-policies.json
+  name        = "pipeline-policy"
+  path        = "/"
+  description = "Pipeline policy"
+  policy      = data.aws_iam_policy_document.pipeline-policies.json
 }
 
 resource "aws_iam_role_policy_attachment" "pipeline-attachment" {
-    policy_arn = aws_iam_policy.pipeline-policy.arn
-    role = aws_iam_role.pipeline_role.id
+  policy_arn = aws_iam_policy.pipeline-policy.arn
+  role       = aws_iam_role.pipeline_role.id
 }
 
 
@@ -67,27 +67,27 @@ EOF
 }
 
 data "aws_iam_policy_document" "build-policies" {
-    statement{
-        sid = ""
-        actions = ["logs:*", "s3:*", "codebuild:*", "secretsmanager:*","iam:*"]
-        resources = ["*"]
-        effect = "Allow"
-    }
+  statement {
+    sid       = ""
+    actions   = ["logs:*", "s3:*", "codebuild:*", "secretsmanager:*", "iam:*"]
+    resources = ["*"]
+    effect    = "Allow"
+  }
 }
 
 resource "aws_iam_policy" "build-policy" {
-    name = "build-policy"
-    path = "/"
-    description = "Codebuild policy"
-    policy = data.aws_iam_policy_document.build-policies.json
+  name        = "build-policy"
+  path        = "/"
+  description = "Codebuild policy"
+  policy      = data.aws_iam_policy_document.build-policies.json
 }
 
 resource "aws_iam_role_policy_attachment" "codebuild-attachment1" {
-    policy_arn  = aws_iam_policy.build-policy.arn
-    role        = aws_iam_role.codebuild-role.id
+  policy_arn = aws_iam_policy.build-policy.arn
+  role       = aws_iam_role.codebuild-role.id
 }
 
 resource "aws_iam_role_policy_attachment" "codebuild-attachment2" {
-    policy_arn  = "arn:aws:iam::aws:policy/PowerUserAccess"
-    role        = aws_iam_role.codebuild-role.id
+  policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
+  role       = aws_iam_role.codebuild-role.id
 }

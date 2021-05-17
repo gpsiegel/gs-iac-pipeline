@@ -1,19 +1,20 @@
 #VPC 1
 resource "aws_vpc" "us-east" {
-  provider = aws.region-1
-  cidr_block = "10.0.0.0/16"
+  provider             = aws.region-1
+  cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-      Name = "VPC-1"
+    Name = "VPC-1"
   }
 }
 
 #IG 1
 resource "aws_internet_gateway" "gw-east" {
-  vpc_id = aws_vpc.us-east.id
+  provider = aws.region-1
+  vpc_id   = aws_vpc.us-east.id
   tags = {
-      Name = "VPC-1"
+    Name = "VPC-1"
   }
 }
 
@@ -26,70 +27,67 @@ data "aws_availability_zones" "azs-1" {
 
 #Subnets 1-1
 resource "aws_subnet" "main-east" {
-  vpc_id     = aws_vpc.us-east.id
-  cidr_block = "10.0.1.0/24"
+  provider          = aws.region-1
+  vpc_id            = aws_vpc.us-east.id
+  cidr_block        = "10.0.1.0/24"
   availability_zone = element(data.aws_availability_zones.azs-1.names, 0)
   tags = {
-      Name = "VPC-1"
+    Name = "VPC-1"
   }
 
 }
 
 #Subnets 1-2
 resource "aws_subnet" "secondary-east" {
-  vpc_id     = aws_vpc.us-east.id
-  cidr_block = "10.0.2.0/24"
+  provider          = aws.region-1
+  vpc_id            = aws_vpc.us-east.id
+  cidr_block        = "10.0.2.0/24"
   availability_zone = element(data.aws_availability_zones.azs-1.names, 1)
   tags = {
-      Name = "VPC-1"
+    Name = "VPC-1"
   }
 
 }
 
 #VPC 2
 resource "aws_vpc" "us-west" {
-  provider = aws.region-2  
-  cidr_block = "172.16.0.0/16"
+  provider             = aws.region-2
+  cidr_block           = "172.16.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-      Name = "VPC-2"
+    Name = "VPC-2"
   }
 }
 
 
 #IG 2
 resource "aws_internet_gateway" "gw-west" {
-  vpc_id = aws_vpc.us-west.id
+  provider = aws.region-2
+  vpc_id   = aws_vpc.us-west.id
   tags = {
-      Name = "VPC-2"
+    Name = "VPC-2"
   }
 }
 
-data "aws_availability_zones" "azs-2" {
-  provider = aws.region-2
-  state    = "available"
-}
-
-
 #Subnet 2-1
 resource "aws_subnet" "main-west" {
+  provider   = aws.region-2
   vpc_id     = aws_vpc.us-west.id
   cidr_block = "172.16.1.0/24"
-  availability_zone = element(data.aws_availability_zones.azs-2.names, 0)
   tags = {
-      Name = "VPC-2"
+    Name = "VPC-2"
   }
 
 }
 
 #Subnet 2-2
 resource "aws_subnet" "secondary-west" {
+  provider   = aws.region-2
   vpc_id     = aws_vpc.us-west.id
   cidr_block = "172.16.2.0/24"
-  availability_zone = element(data.aws_availability_zones.azs-2.names, 1)
   tags = {
-      Name = "VPC-2"
+    Name = "VPC-2"
   }
 }
 
@@ -101,10 +99,10 @@ resource "aws_vpc_peering_connection" "us-east-west-peer" {
   vpc_id        = aws_vpc.us-east.id
   peer_owner_id = data.aws_caller_identity.current.account_id
   peer_region   = "us-west-1"
-  auto_accept = false
+  auto_accept   = false
 
   tags = {
-      Name = "us-east-west-peer"
+    Name = "us-east-west-peer"
   }
 }
 
